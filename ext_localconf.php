@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['log']['backends'][] = 'Z7\\Log\\Backends\\RedisBackend';
-//$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['log']['settings']['backend'] = 'Z7\\Log\\Backends\\RedisBackend';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['log']['backends'][] = 'Z7\\Log\\Backends\\NullBackend';
 
 // Register status report…
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers']['log'][] = 'Z7\\Log\\Reports\\LogReport';

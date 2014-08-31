@@ -41,10 +41,11 @@ class SystemLog extends AbstractLog {
 	/**
 	 * Initialize…
 	 *
+	 * @param \Z7\Log\Backends\LogBackendInterface $backend optional
 	 * @return \void
 	 */
-	public function __construct() {
-		$this->backend = \Z7\Log\Backends\LogBackendFactory::getBackend('systemLog');
+	public function __construct(\Z7\Log\Backends\LogBackendInterface $backend = NULL) {
+		$this->backend = ($backend !== NULL) ? $backend : \Z7\Log\Backends\LogBackendFactory::getBackend('systemLog');
 	}
 
 	/**
@@ -53,7 +54,7 @@ class SystemLog extends AbstractLog {
 	 * @param \array $data
 	 * @return \void
 	 */
-	public function log($data) {
+	public function log(array $data) {
 		// Logstash uses message, and it's the better key anyway…
 		$data['message'] = ($data['msg'] === NULL) ? '' : $data['msg'];
 		unset($data['msg']);
@@ -64,9 +65,7 @@ class SystemLog extends AbstractLog {
 		$data['time'] = $this->getTime();
 		$data['tags'] = array('sys', 'syslog');
 
-		// We have to skip the backtrace for now, as this structure cannot always be converted
-		// to plain JSON for transport. TODO
-		$data['backTrace'] = ($data['backTrace'] !== NULL) ? 'Skipped…' : $data['backTrace'];
+		$data['backTrace'] = ($data['backTrace'] !== NULL) ? (array) $data['backTrace'] : NULL;
 
 		if ($this->backend !== NULL) {
 			$json = json_encode($data);

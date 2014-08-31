@@ -25,38 +25,32 @@ namespace Z7\Log\Tests;
  ***************************************************************/
 
 /**
- * Test case for class Tx_Log_Backends_LogBackendFactory.
- *
- * @package log
- * @author Andreas Lappe <nd@zimmer7.com>
+ * Test case for class \Z7\Log\Hooks\DevelopmentLog.
  */
-class LogBackendFactoryTest extends \TYPO3\CMS\Extbase\Tests\Unit\BaseTestCase {
+class DevelopmentLogTest extends \TYPO3\CMS\Extbase\Tests\Unit\BaseTestCase {
 
-	/**
-	 * @test
-	 */
-	public function getBackendForIdentifierReturnsBackendIfExists() {
-		$backend = \Z7\Log\Backends\LogBackendFactory::getBackend('systemLog');
-
-		$this->assertInstanceOf(
-			'\Z7\Log\Backends\LogBackendInterface',
-			$backend
-		);
-
-		$this->assertSame(
-			$backend,
-			\Z7\Log\Backends\LogBackendFactory::getBackend('systemLog')
-		);
+	public function getBackendMock($callback) {
+		$backendMock = $this->getMock('\Z7\Log\Backends\NullBackend', array('log'), array());
+		$backendMock->expects($this->once())
+			->method('log')
+			->with($this->callback($callback));
+		return $backendMock;
 	}
 
 	/**
 	 * @test
 	 */
-	public function getBackendForIdentifierCreatesBackendIfConfigured() {
-		$this->assertInstanceOf(
-			'\Z7\Log\Backends\LogBackendInterface',
-			\Z7\Log\Backends\LogBackendFactory::getBackend('developmentLog')
-		);
+	public function logForDataCallsBackendPassingJsonEncodedData() {
+		$backendMock = $this->getBackendMock(function($subject) {
+			$this->assertSame(
+				'This is the end!',
+				json_decode($subject)->message
+			);
+			return TRUE;
+		});
+
+		$subject = new \Z7\Log\Hooks\SystemLog($backendMock);
+		$subject->log(array('msg' => 'This is the end!'));
 	}
 }
 ?>

@@ -36,10 +36,11 @@ class DevelopmentLog extends AbstractLog {
 	/**
 	 * Initialize a backend to log to…
 	 *
+	 * @param \Z7\Log\Backends\LogBackendInterface $backend optional
 	 * @return \void
 	 */
-	public function __construct() {
-		$this->backend = \Z7\Log\Backends\LogBackendFactory::getBackend('developmentLog');
+	public function __construct(\Z7\Log\Backends\LogBackendInterface $backend = NULL) {
+		$this->backend = ($backend !== NULL) ? $backend : \Z7\Log\Backends\LogBackendFactory::getBackend('developmentLog');
 	}
 
 	/**
@@ -48,7 +49,7 @@ class DevelopmentLog extends AbstractLog {
 	 * @param \array $data
 	 * @return \void
 	 */
-	public function log($data) {
+	public function log(array $data) {
 		$data['message'] = $data['msg'];
 		unset($data['msg']);
 

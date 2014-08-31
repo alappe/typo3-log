@@ -27,11 +27,8 @@ namespace Z7\Log\Backends;
 
 /**
  * Redis Backend
- *
- * @package log
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class RedisBackend implements LogBackendInterface {
+class RedisBackend implements LogBackendInterface, \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * var \array

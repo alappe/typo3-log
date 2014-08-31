@@ -31,7 +31,7 @@ namespace Z7\Log\Hooks;
  * @package log
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-abstract class AbstractLog {
+abstract class AbstractLog implements \TYPO3\CMS\Core\SingletonInterface {
 
 	protected $severityDescription = array(
 		0 => 'info',
