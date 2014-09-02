@@ -65,7 +65,8 @@ class SystemLog extends AbstractLog {
 		$data['time'] = $this->getTime();
 		$data['tags'] = array('sys', 'syslog');
 
-		$data['backTrace'] = ($data['backTrace'] !== NULL) ? (array) $data['backTrace'] : NULL;
+		// $data['backTrace'] = ($data['backTrace'] !== NULL) ? (array) $data['backTrace'] : NULL;
+		$data['backTrace'] = ($data['backTrace'] !== NULL) ? 'Skipped…' : $data['backTrace'];
 
 		if ($this->backend !== NULL) {
 			$json = json_encode($data);
